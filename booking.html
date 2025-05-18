@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#3498db">
+    <title>Booking - Ebenezer Dry Cleaner</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <h1>Ebenezer Dry Cleaner</h1>
+        </div>
+        <nav class="main-nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="services.html" class="nav-link">Services</a>
+            <a href="booking.html" class="nav-link">Booking</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </nav>
+    </header>
+    <main class="booking-section">
+        <div class="form-container">
+            <h2>Schedule a Pickup</h2>
+            <form class="booking-form" id="bookingForm">
+                <div class="form-grid">
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Preferred Pickup Date</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+                    </div>
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="address">Pickup Address</label>
+                            <textarea id="address" name="address" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Preferred Time</label>
+                            <select id="time" name="time" required>
+                                <option value="">Select a time</option>
+                                <option value="morning">Morning (8:00 - 12:00)</option>
+                                <option value="afternoon">Afternoon (12:00 - 16:00)</option>
+                                <option value="evening">Evening (16:00 - 19:00)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Special Instructions</label>
+                            <textarea id="notes" name="notes"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="cta-button">Schedule Pickup</button>
+            </form>
+            <div id="formMessage" class="form-message" style="display: none;"></div>
+        </div>
+    </main>
+    
+    <script>
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('process_booking.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messageDiv = document.getElementById('formMessage');
+                if (data.success) {
+                    messageDiv.innerHTML = 'Thank you! Your booking request has been sent. We will contact you shortly.';
+                    messageDiv.className = 'form-message success';
+                    this.reset();
+                } else {
+                    messageDiv.innerHTML = 'Sorry, there was an error sending your booking request. Please try again or contact us directly.';
+                    messageDiv.className = 'form-message error';
+                }
+                messageDiv.style.display = 'block';
+            })
+            .catch(error => {
+                const messageDiv = document.getElementById('formMessage');
+                messageDiv.innerHTML = 'Sorry, there was an error sending your booking request. Please try again or contact us directly.';
+                messageDiv.className = 'form-message error';
+                messageDiv.style.display = 'block';
+            });
+        });
+    </script>
+    <footer class="main-footer">
+        <p>© 2025 Ebenezer Dry Cleaner - Nyamata, Rwanda</p>
+    </footer>
+</body>
+</html>
